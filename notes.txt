@@ -1,0 +1,101 @@
+Performance Optimization:
+	-See if we can narrow down number of bodies considered when checking collisions (remove doodads entirely)
+		-Or come up with a new class of object that is just an image. No actor, no body, static sprite
+		-Tile object?
+	-Draw a solid box around vicinity areas to prevent anything from going outside. Box moves with map area vicinity.
+		-Also need solid walls at edge of map. Unsure how to ensure bounding boxes don't collide.
+	-Map area tracker stored in profile (break map down into ~70x70 squares?)
+
+Game Notes:
+	-Unique Item: supercharge engines ("emergency vector engines"). screen shake and increase thrust
+
+General Dev:
+	-Add UI Box movement patterns/styles and interface methods (Display should already move along with it I think)
+	-Revisit if area query during spawn is implemented/working. Look at Troupe:dimensions property
+	-Resolve whether actor shakeScreen action should have a default interval of its deathtimer if not specified.
+	-Determine if to keep Actor.getCalloutInfo and actual stats
+
+WORDS LIST
+Takama Optics, Noer Industries
+Weapons: Each type has power levels, with each weapon falling into one power level
+	Energy: beamer, electricity, energy drill, heat sword, saw, electron hammer, energy spear, tunnel, sub-atomic,
+		ray, pulse, tunneler, matter disrupter, emerald, sapphire, ruby, blue dragon, gamma ray, light bringer,
+		magnet, coil, optics, Takama Optics, lightgun, (gamma ray: green, semi-translucent, doesn't raycast, use lighten compositing mode),
+		nanoscale/micro-laser: red, 1px thicknesss, quick turret turning
+
+	Kinetic: repeater, heavygun, vulcan, twin cannon, quadgun, smartgun, "repeater500", hammer, rotator, shotgun, flak cannon, scattergun,
+		"Red Hot _____ / Red4Lead", showstopper, "Heavy Thunder", "Surplus+ (semi-scatter effect)", "____ Express",
+		cross/spreadfire: has an area of effect and has a VFX of peppering area with bullets. possible also a red circular overlay
+
+	Explosive: grenade launcher, missile launcher, (multi-)rocket launcher, hurricane, tornado, seeker missiles, Assassin, Javelin
+		mines, bazooka
+
+	*Shotgun: could cause multiple small hits within an area. similar to small explosions
+	Electronic: virus, scanner, malware, electronic countermeasure (ECM), demon, tools, fragmenter, disk, worm, ____Net,
+		AI, intelligent, torrent, tsunami, tornado, hurricane
+
+
+Next Steps
+----------------------------
+-Map
+	-Districts within the map (random names. slum, district) with some defining characteristic (architecture, color)
+	-Come up with procgen chamber/district names
+	-Can store if region has been visited before. This can then be used for map purposes.
+		-Map can break down data into region squares. Unsure exactly how these would be represented visually.
+		-Maybe have a dark grid with blue lines, and visited regions are filled in with color.
+
+-Enemies:
+	-Enemies cannot be allowed to wander outside of active areas.
+		-Query every few seconds and put ones too far out to sleep?
+	-Floating, rotating spherical turret. Laser attack.
+	-Stationary, enemy-spawners (possibly on ceiling as well). Small floating enemies spawned from it.
+		-Need a way to track/limit number of enemies spawned from a single source (create a spawn counter)
+		-Write spawnEnemy() action. Could possibly include this with shoot actions
+	-Stationary, spiked areas. Doodads with a payload with force value. Full-sized sensor box and smaller structure box to give solidity.
+	-Stationary, single linked arm, worm-like. Actor at tip that directs entire chain (and body?)
+	-Floating, amoeba-like creatures
+	-Stationary, spawner, creates "shots" that drop.
+		-Spawner possibly invisible (ornament).
+		-Limited dripping animation built into drop
+		-Acid explosion animation on contact
+	-Camouflaged enemies that change/animate appearance when they're stationary.
+		-Either mimic terrain or become transparent.
+		-Possibly include some sort of transition sprite animation mode/frames
+
+-Terrain/Doodads:
+	-Water doodads probably would also need to be above player z-index.
+
+
+-UI:
+	-Boxes:
+		-Side area contains stacked game log. Also possibly objectives/missions/quests
+		-Game state stats (city name, district name, player statuses, objective)
+
+
+
+Eventual To-Dos:
+-See what functionality can be removed from Runner or Engine.
+-Remove unused rendering code (constraints, wireframes, polygons, anything else). Probably just comment out and leave for debug purposes.
+
+
+
+----------------------------
+
+Unique Items
+-Energy shield (refractor): stops damage from lasers
+-Missile bonuses: faster, increase damage/yield, guidance system (seeks enemies), armored, smaller attack cooldown, multi-missile launcher
+-Item collector: sensor that increases hitbox or drags items towards you
+-Something that reduces laser ammo spent
+-Drones: laser turret, guidance drone (locks on missiles). Unsure how drones will have their own logic/behavior
+-Smart bullets: a small front sensor that shot orients towards
+-Engine upgrades (Fuel Purifier/Condenser): faster top speed
+-Inertia reduction 1 (Stiener Field, Inertial Battery): better handling (apply more reverse force if going in direction opposite of force)
+-Inertia reduction 2 (Mach Engine): faster acceleration (extra force applied when moving from rest for extra kick)
+
+
+Non-Uniform Distribution
+(http://stackoverflow.com/questions/16110758/generate-random-number-with-a-non-uniform-distribution)
+-Normal distribution: sin(x*pi)^2   => shallower:  0.65 * sin(x*pi)^2
+-Opposite of normal, weighted towards edges: 1 - (sin(x*pi)^2)    => shallower: 1-0.65(sin(x*pi)^2)
+-Skewed right/high:   sin(x*pi/2)^2
+-Skewed left/low:   1 - sin(x*pi/2)^2

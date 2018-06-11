@@ -1,0 +1,16 @@
+{
+  "name": "ProximityDragon",
+  "version": "0.0.1",
+  "main": "./main.js",
+  "scripts": {
+    "start": "electron .",
+    "buildOne": "electron-packager . --platform=win32 TestBuildOne"
+  },
+  "dependencies": {
+    "electron": "^1.6.2",
+    "matter-js": "^0.12.0",
+    "maxrects-packer": "^1.2.0",
+    "nedb": "^1.8.0",
+    "wav-decoder": "^1.1.0"
+  }
+}
